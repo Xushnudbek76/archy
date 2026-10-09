@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "monorepo": true,
+  "root": "apps/archy-api",
+  "sourceRoot": "apps/archy-api/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": false,
+    "tsConfigPath": "apps/archy-api/tsconfig.app.json"
+  },
+  "projects": {
+    "archy-api": {
+      "type": "application",
+      "root": "apps/archy-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/archy-api/src",
+      "compilerOptions": {
+        "webpack": false,
+        "tsConfigPath": "apps/archy-api/tsconfig.app.json"
+      }
+    }
+  }
+}
