@@ -4,7 +4,7 @@
 
 Archy is a lecture workspace for organizing courses, recordings, transcripts and notes. This repository contains its independently runnable NestJS backend.
 
-**Stage:** database foundation. The API has configuration validation, liveness/readiness endpoints, request tracing, safe errors and Prisma migrations for users and courses. Authentication, course HTTP endpoints and recording processing are planned. Hosted development provisioning is pending.
+**Stage:** database foundation connected. The API has configuration validation, liveness/readiness endpoints, request tracing, safe errors and Prisma migrations for users and courses. Hosted PostgreSQL migrations and API readiness have been verified. Authentication, course HTTP endpoints and recording processing are planned.
 
 **Frontend:** [archy-next](https://github.com/Xushnudbek76/archy-next).
 
@@ -106,7 +106,7 @@ The entrypoint is `dist/apps/archy-api/main.js`. Successful compilation does not
 
 ## Next milestones
 
-1. Connect the dedicated hosted development database, then authentication and owner-scoped courses.
+1. Authentication and owner-scoped courses.
 2. Private audio ingestion and recording persistence.
 3. Durable transcription and AI notes in a separate batch application.
 4. Search, recording recovery, administration and deployment.

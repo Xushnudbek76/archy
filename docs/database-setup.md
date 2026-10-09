@@ -1,10 +1,10 @@
 # Database setup
 
-Archy uses PostgreSQL through Prisma. Hosted development will use a new `archy-dev` project in the human's personal Supabase organization. The original active Archy project is not a development database for this rebuild. Personal account connection, organization selection and project cost confirmation remain pending.
+Archy uses PostgreSQL through Prisma. Hosted development is configured in the human-selected personal Supabase project in Tokyo. Its application roles and `app` schema were absent before setup; migrations and API readiness have now been verified. The original company Archy project is not a development database for this rebuild and was not changed.
 
 ## Dedicated Supabase development project
 
-1. Create the dedicated project only after selecting the organization and confirming its actual cost. Seoul (`ap-northeast-2`) is suitable for development in Korea.
+1. Select a personal project dedicated to development. Inspect it before provisioning: bootstrap requires unused application roles and an absent `app` schema. This setup reused the selected personal project without creating another cloud project. If creating a project instead, select its organization and confirm its actual cost first.
 2. In the project's **Connect** panel, obtain a PostgreSQL connection. On an IPv4 Mac, use **Session pooler**, port **5432**. Direct connections work when IPv6 is available. Do not use the transaction pooler on port 6543 for migrations.
 3. Copy `.env.bootstrap.example` to `.env.bootstrap`. Set the administrator connection as `BOOTSTRAP_DATABASE_URL`, with `schema=app&sslmode=verify-full`. Set two different random passwords of at least 24 characters. For example, generate each locally with `openssl rand -hex 24`. Keep these passwords out of chat, Git and command arguments.
 4. Run `npm run db:bootstrap` once. It creates `archy_migrator`, `archy_runtime` and the private `app` schema in a transaction. It refuses an existing app schema or application roles, and never rotates existing passwords. Administrator access is only needed for this step.

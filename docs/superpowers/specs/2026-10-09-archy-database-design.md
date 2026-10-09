@@ -1,6 +1,6 @@
 # Archy database foundation
 
-The next authorized milestone adds PostgreSQL persistence infrastructure to the separate NestJS backend. Hosted development uses a dedicated Supabase project selected by the human; existing projects are not changed. Frontend, login and course endpoints are outside this task.
+The next authorized milestone adds PostgreSQL persistence infrastructure to the separate NestJS backend. Hosted development uses the dedicated personal Supabase project selected by the human; the original company project is not changed. Frontend, login and course endpoints are outside this task.
 
 ## Boundaries
 

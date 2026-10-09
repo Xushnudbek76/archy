@@ -22,7 +22,7 @@ Spec: [Database design](../specs/2026-10-09-archy-database-design.md). Backend o
 
 ## Task 4 — Hosted handoff
 
-- [ ] Use the human-selected Supabase organization/project; confirm actual project cost before creating it. Store development credentials only in ignored environment files.
-- [ ] Apply Prisma migrations to the dedicated development project and verify actual readiness. Record limitations accurately.
+- [x] Use the human-selected personal Supabase project. Reuse its empty application namespace without creating another project; store development credentials only in ignored environment files.
+- [x] Apply Prisma migrations to the dedicated development project and verify actual readiness. Record limitations accurately.
 
 Review focus: private schema access, runtime role DDL denial, migration credentials absent at runtime, missing tables fail readiness, credential-safe startup/errors, timeout and connection cleanup, isolated test data.
