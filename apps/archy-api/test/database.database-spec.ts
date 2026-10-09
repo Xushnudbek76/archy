@@ -4,22 +4,16 @@ import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { createApplication } from '../src/application';
 import { PrismaService } from '../src/database/prisma.service';
+import { isolatedDatabaseUrl } from './database-connection';
 
-const url = process.env.TEST_DATABASE_URL;
-if (!url) throw new Error('TEST_DATABASE_URL is required for database tests');
-const migrationUrl = process.env.TEST_MIGRATION_DATABASE_URL;
-if (!migrationUrl) throw new Error('TEST_MIGRATION_DATABASE_URL is required');
-for (const connection of [url, migrationUrl]) {
-  const parsed = new URL(connection);
-  if (
-    !['localhost', '127.0.0.1', '[::1]'].includes(parsed.hostname) ||
-    parsed.pathname !== '/archy_test'
-  ) {
-    throw new Error(
-      'Database tests require the isolated local archy_test database',
-    );
-  }
-}
+const url = isolatedDatabaseUrl(
+  process.env.TEST_DATABASE_URL,
+  'TEST_DATABASE_URL',
+);
+const migrationUrl = isolatedDatabaseUrl(
+  process.env.TEST_MIGRATION_DATABASE_URL,
+  'TEST_MIGRATION_DATABASE_URL',
+);
 
 describe('migrated application database', () => {
   const database = new Pool({

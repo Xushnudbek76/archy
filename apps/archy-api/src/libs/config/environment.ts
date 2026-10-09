@@ -77,6 +77,16 @@ export function validateDatabaseUrl(
   if (!value) return invalid();
   try {
     const url = new URL(value);
+    // pg merges connection-string query options over authority and pool settings.
+    // Only schema selection and verified TLS configuration are configurable here.
+    const allowedParameters = new Set(['schema', 'sslmode', 'sslrootcert']);
+    for (const key of url.searchParams.keys()) {
+      if (
+        !allowedParameters.has(key) ||
+        url.searchParams.getAll(key).length !== 1
+      )
+        return invalid();
+    }
     const local = ['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname);
     if (
       !['postgres:', 'postgresql:'].includes(url.protocol) ||

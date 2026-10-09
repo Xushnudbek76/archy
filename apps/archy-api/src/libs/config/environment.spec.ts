@@ -83,6 +83,23 @@ describe('API environment boundary', () => {
 });
 
 describe('database configuration', () => {
+  it.each([
+    'user=postgres',
+    'host=remote.example.com',
+    'query_timeout=600000',
+    'statement_timeout=600000',
+    'ssl=false',
+  ])(
+    'rejects driver parameters that override validated connection settings',
+    (override) => {
+      expect(() =>
+        loadEnvironment({
+          DATABASE_URL: `postgresql://archy_runtime:fixture@127.0.0.1/archy_test?schema=app&${override}`,
+        }),
+      ).toThrow('Invalid configuration: DATABASE_URL');
+    },
+  );
+
   it('requires runtime credentials without requiring migration credentials', () => {
     expect(() => loadEnvironment({})).toThrow(
       'Invalid configuration: DATABASE_URL',

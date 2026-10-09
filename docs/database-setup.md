@@ -15,6 +15,8 @@ Archy uses PostgreSQL through Prisma. Hosted development will use a new `archy-d
 
 Hosted TLS must verify certificates. If your connection requires Supabase's downloaded CA certificate, supply its URL-encoded path using `sslrootcert` rather than disabling verification. Application tables stay outside the Data API's exposed schemas. Do not add `app` to exposed schemas or grant `anon`/`authenticated` application-table access.
 
+Connection URL parameters are limited to `schema`, `sslmode` and `sslrootcert`, with no duplicates. User/host/database overrides and pool/timeout parameters are rejected; credentials and targets must be in the URL authority/path. API connection limits are owned by the backend configuration.
+
 Sources: [Supabase connection methods](https://supabase.com/docs/guides/database/connecting-to-postgres), [Prisma with Supabase](https://supabase.com/docs/guides/database/prisma), [Prisma 7 configuration](https://www.prisma.io/docs/orm/v7/reference/prisma-config-reference).
 
 ## Optional local PostgreSQL
