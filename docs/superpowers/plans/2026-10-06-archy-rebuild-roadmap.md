@@ -1,6 +1,6 @@
 # Archy Rebuild Roadmap
 
-Status: initial local skeleton verified; later milestones remain planned. No external provisioning performed.
+Status: separate API/frontend foundations published; PostgreSQL/Prisma foundation verified locally. Hosted development provisioning and identity/course workflows remain pending.
 
 **Goal:** Rebuild Archy as a maintainable lecture assistant with complete user workflows, durable processing, and verified operations.
 
@@ -57,7 +57,7 @@ Use independent npm projects and lockfiles, Node.js 24 LTS, strict TypeScript, N
 
 - [x] Bootstrap the local web/API and validated environment configuration.
 - [x] Align separate project roots and folder conventions with Insu/Nestar.
-- [ ] Define User and Course models and Prisma-owned `app` schema migrations.
+- [x] Define User and Course models and Prisma-owned `app` schema migrations.
 - [ ] Verify Supabase JWTs in NestJS and read administrator role from the database.
 - [ ] Implement owner-scoped course create/list/rename/archive APIs.
 - [ ] Generate the frontend API client; build responsive login/course screens.

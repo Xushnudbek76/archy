@@ -35,6 +35,8 @@ describe('API exception boundary', () => {
       port: 3007,
       host: '127.0.0.1',
       webOrigin: 'http://localhost:3000',
+      databaseUrl:
+        'postgresql://archy_runtime:test@127.0.0.1:1/archy?schema=app',
     });
     await app.init();
   });
