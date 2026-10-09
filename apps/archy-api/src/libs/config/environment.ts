@@ -3,6 +3,7 @@ export interface Environment {
   port: number;
   host: string;
   webOrigin: string;
+  databaseUrl: string;
 }
 
 export function loadEnvironment(env: NodeJS.ProcessEnv): Environment {
@@ -49,5 +50,50 @@ export function loadEnvironment(env: NodeJS.ProcessEnv): Environment {
     return invalid('WEB_ORIGIN');
   }
 
-  return { nodeEnv: nodeEnv as Environment['nodeEnv'], port, host, webOrigin };
+  const databaseUrl = validateDatabaseUrl(env.DATABASE_URL);
+  try {
+    const username = decodeURIComponent(new URL(databaseUrl).username);
+    if (!/^archy_runtime(?:\.[a-z0-9]+)?$/.test(username))
+      invalid('DATABASE_URL');
+  } catch {
+    return invalid('DATABASE_URL');
+  }
+  return {
+    nodeEnv: nodeEnv as Environment['nodeEnv'],
+    port,
+    host,
+    webOrigin,
+    databaseUrl,
+  };
+}
+
+export function validateDatabaseUrl(
+  value: string | undefined,
+  name = 'DATABASE_URL',
+): string {
+  const invalid = (): never => {
+    throw new Error(`Invalid configuration: ${name}`);
+  };
+  if (!value) return invalid();
+  try {
+    const url = new URL(value);
+    const local = ['127.0.0.1', 'localhost', '[::1]'].includes(url.hostname);
+    if (
+      !['postgres:', 'postgresql:'].includes(url.protocol) ||
+      !url.hostname ||
+      !url.username ||
+      !url.password ||
+      url.pathname.length < 2 ||
+      url.hash ||
+      url.searchParams.getAll('schema').length !== 1 ||
+      url.searchParams.get('schema') !== 'app' ||
+      (!local &&
+        (url.searchParams.getAll('sslmode').length !== 1 ||
+          url.searchParams.get('sslmode') !== 'verify-full'))
+    )
+      return invalid();
+    return value;
+  } catch {
+    return invalid();
+  }
 }

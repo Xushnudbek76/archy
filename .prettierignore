@@ -5,3 +5,5 @@ coverage
 package-lock.json
 .superpowers
 next-env.d.ts
+
+apps/archy-api/src/database/generated

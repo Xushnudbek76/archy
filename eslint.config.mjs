@@ -4,10 +4,12 @@ import tseslint from 'typescript-eslint';
 export default [
   {
     ignores: [
+      '.superpowers/**',
       '**/dist/**',
       '**/.next/**',
       '**/coverage/**',
       '**/next-env.d.ts',
+      'apps/archy-api/src/database/generated/**',
     ],
   },
   js.configs.recommended,

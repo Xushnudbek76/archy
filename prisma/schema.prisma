@@ -1,0 +1,41 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../apps/archy-api/src/database/generated"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["app"]
+}
+
+enum UserRole {
+  USER
+  ADMIN
+
+  @@schema("app")
+}
+
+model User {
+  id          String   @id @db.Uuid
+  email       String?  @db.VarChar(320)
+  displayName String?  @db.VarChar(100)
+  role        UserRole @default(USER)
+  createdAt   DateTime @default(now()) @db.Timestamptz(6)
+  courses     Course[]
+
+  @@schema("app")
+}
+
+model Course {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ownerId    String    @db.Uuid
+  owner      User      @relation(fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  title      String    @db.VarChar(100)
+  archivedAt DateTime? @db.Timestamptz(6)
+  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
+
+  @@index([ownerId, archivedAt, createdAt(sort: Desc), id(sort: Desc)])
+  @@schema("app")
+}

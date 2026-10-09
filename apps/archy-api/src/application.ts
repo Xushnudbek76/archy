@@ -20,7 +20,7 @@ export function configureApplication(
 }
 
 export async function createApplication(environment: Environment) {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create(AppModule.register(environment), {
     logger: environment.nodeEnv === 'test' ? false : ['log', 'warn', 'error'],
   });
   configureApplication(app, environment);

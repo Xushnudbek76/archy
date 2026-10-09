@@ -8,6 +8,10 @@ import {
 import { Response } from 'express';
 
 const publicErrors: Record<number, { code: string; message: string }> = {
+  503: {
+    code: 'SERVICE_UNAVAILABLE',
+    message: 'Service temporarily unavailable',
+  },
   400: { code: 'BAD_REQUEST', message: 'Invalid request' },
   401: { code: 'UNAUTHORIZED', message: 'Authentication required' },
   403: { code: 'FORBIDDEN', message: 'Access denied' },

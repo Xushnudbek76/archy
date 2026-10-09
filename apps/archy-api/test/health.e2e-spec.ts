@@ -11,6 +11,8 @@ describe('public API boundary', () => {
       port: 3007,
       host: '127.0.0.1',
       webOrigin: 'http://localhost:3000',
+      databaseUrl:
+        'postgresql://archy_runtime:test@127.0.0.1:1/archy?schema=app',
     });
     await app.init();
   });
@@ -24,6 +26,19 @@ describe('public API boundary', () => {
       .expect(200);
     expect(response.body).toEqual({ status: 'ok' });
     expect(response.headers['x-request-id']).toMatch(/^[0-9a-f-]{36}$/);
+  });
+
+  it('reports unavailable database readiness without affecting liveness', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/v1/health/ready')
+      .expect(503);
+    expect(response.body).toEqual({
+      code: 'SERVICE_UNAVAILABLE',
+      message: 'Service temporarily unavailable',
+      requestId: response.headers['x-request-id'],
+    });
+    expect(response.text).not.toContain('archy_runtime');
+    await request(app.getHttpServer()).get('/v1/health/live').expect(200);
   });
 
   it('returns a stable error envelope correlated with the response header', async () => {

@@ -10,6 +10,20 @@ permissions:
 jobs:
   foundation:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: archy_test
+          POSTGRES_USER: archy_test_admin
+          POSTGRES_PASSWORD: ci-only-admin-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U archy_test_admin -d archy_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -18,4 +32,16 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      - run: npm run db:bootstrap
+        env:
+          BOOTSTRAP_DATABASE_URL: postgresql://archy_test_admin:ci-only-admin-password@127.0.0.1:5432/archy_test?schema=app
+          MIGRATION_DATABASE_PASSWORD: migration-ci-only-password
+          RUNTIME_DATABASE_PASSWORD: runtime-ci-only-password-123
+      - run: npm run db:migrate
+        env:
+          DIRECT_URL: postgresql://archy_migrator:migration-ci-only-password@127.0.0.1:5432/archy_test?schema=app
+      - run: npm run test:database
+        env:
+          TEST_DATABASE_URL: postgresql://archy_runtime:runtime-ci-only-password-123@127.0.0.1:5432/archy_test?schema=app
+          TEST_MIGRATION_DATABASE_URL: postgresql://archy_migrator:migration-ci-only-password@127.0.0.1:5432/archy_test?schema=app
       - run: npm audit --omit=dev

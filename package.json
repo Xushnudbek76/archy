@@ -13,7 +13,7 @@
     "start:dev": "nest start archy-api --watch",
     "start": "node dist/apps/archy-api/main.js",
     "start:prod": "NODE_ENV=production node dist/apps/archy-api/main.js",
-    "build": "nest build archy-api",
+    "build": "npm run db:generate && nest build archy-api",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -21,30 +21,51 @@
     "test": "jest --config jest.config.cjs --runInBand",
     "test:integration": "jest --config apps/archy-api/test/jest-e2e.config.cjs --runInBand",
     "test:e2e": "npm run test:integration",
-    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run test:integration && npm run build"
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm test && npm run test:integration && npm run build",
+    "db:generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:migrate": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "postinstall": "npm run db:generate",
+    "test:database": "jest --config apps/archy-api/test/jest-database.config.cjs --runInBand",
+    "db:bootstrap": "tsx scripts/bootstrap-database.ts"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",
-    "eslint": "9.39.5",
-    "prettier": "3.9.9",
-    "typescript": "5.9.3",
-    "typescript-eslint": "8.71.1",
     "@nestjs/cli": "11.0.24",
     "@nestjs/testing": "11.2.7",
     "@types/express": "5.0.6",
     "@types/jest": "30.0.0",
     "@types/node": "24.19.1",
+    "@types/pg": "8.23.1",
     "@types/supertest": "7.2.1",
+    "eslint": "9.39.5",
     "jest": "30.5.2",
+    "prettier": "3.9.9",
+    "prisma": "7.10.0",
     "supertest": "7.3.1",
-    "ts-jest": "29.4.14"
+    "ts-jest": "29.4.14",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.1"
   },
   "dependencies": {
     "@nestjs/common": "11.2.7",
     "@nestjs/core": "11.2.7",
     "@nestjs/platform-express": "11.2.7",
+    "@prisma/adapter-pg": "7.10.0",
+    "@prisma/client": "7.10.0",
     "dotenv": "18.0.6",
+    "pg": "8.23.1",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2"
+  },
+  "overrides": {
+    "@prisma/config": {
+      "deepmerge-ts": "8.0.2"
+    },
+    "prisma": {
+      "mysql2": "3.24.5"
+    }
   }
 }
